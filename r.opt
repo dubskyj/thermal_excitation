@@ -1,0 +1,16 @@
+#!/bin/bash -l
+
+SCR=$TMPDIR
+ORIG=`pwd`
+
+# Copy input file to scratch dir
+cp -r medoids $SCR
+cp opt.py $SCR
+cd $SCR
+
+# Run the script
+python3 opt.py
+
+# Copy output files back to your home directory
+cp -r analysis.pkl opts $ORIG/.
+

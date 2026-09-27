@@ -1,0 +1,50 @@
+#!/bin/bash -l
+
+########## CONFIGURATION ##########
+
+STAGE=$1
+GEOM="geom.xyz" # Input file
+OUTPUT="movie.xyz" # Output file
+
+TIMESTEP=0.1 # fs
+STEPS=250000
+
+CHARGE=0
+SPIN=1
+INTERVAL=100 # Recording frame interval (stride)
+
+DATASET="..."
+
+###################################
+
+SCR=$TMPDIR
+ORIG=`pwd`
+
+{
+	date
+    echo "Running on: $SLURM_JOB_NODELIST"
+	echo "Job ID: $SLURM_JOB_ID" 
+	echo ""
+	echo "Geometry file: $GEOM"
+	echo "Output file: $OUTPUT"
+    echo "Timestep: $TIMESTEP"
+    echo "Steps: $STEPS"
+    echo "Charge: $CHARGE"
+    echo "Spin: $SPIN"
+    echo "Interval: $INTERVAL"
+	echo "Dataset: $DATASET"
+} > "$STAGE/node.log"
+
+
+# Copy input file to scratch dir
+cp $STAGE/$GEOM omol.py $SCR
+cd $SCR
+
+# Run the script
+python3 omol.py $TIMESTEP $STEPS $CHARGE $SPIN $GEOM $OUTPUT $INTERVAL $DATASET
+
+# Copy output files back to your home directory
+cp $OUTPUT $ORIG/$STAGE/.
+mv $ORIG/slurm-$SLURM_JOB_ID.out $ORIG/$STAGE
+
+

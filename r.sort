@@ -1,0 +1,22 @@
+#!/bin/bash -l
+
+########## CONFIGURATION #######
+
+ENERGY="20 15 10"
+
+################################
+
+SCR=$TMPDIR
+ORIG=`pwd`
+
+# Copy input file to scratch dir
+cp -r $ENERGY $SCR
+cp sort.py $SCR
+cd $SCR
+
+# Run the script
+python3 sort.py
+
+# Copy output files back to your home directory
+cp -r geoms $ORIG/.
+

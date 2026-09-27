@@ -1,0 +1,26 @@
+#!/bin/bash -l
+
+########## CONFIGURATION #######
+
+ENERGY=20
+
+################################
+
+SCR=$TMPDIR
+ORIG=`pwd`
+
+# Copy input file to scratch dir
+cp -r $ENERGY $SCR
+cp reactions.py $SCR
+cd $SCR
+
+# Run the script
+python3 reactions.py $ENERGY
+
+# Copy output files back to your home directory
+cp -r species $ORIG/.
+
+for d in "$ENERGY"/*; do
+    cp "$d"/*.dat "$ORIG/$d/"
+done
+
